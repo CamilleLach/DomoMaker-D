@@ -1,23 +1,22 @@
 const Domo = require('../models/Domo.js');
 
 
-const makerPage = async (req, res) => {
-    if (!req.session.account) {
-        return res.redirect('/');
-    }
+const makerPage = (req, res) => res.render('app');
+
+
+const getDomos = async (req, res) => {
+    const query = { owner: req.session.account._id };
 
     try {
-        const query = { owner: req.session.account._id };
-        const docs = await Domo.find(query).lean().exec();
+        const docs = await Domo.find(query).select('name age').lean().exec();
 
-        return res.render('app', { domos: docs });
+        return res.json({ domos: docs });
     } catch (err) {
         console.log(err);
-        return res.status(500).json({
-            error: 'Error retrieving Domos!',
-        });
+        return res.status(500).json({ error: 'Error retrieving domos!' });
     }
 };
+
 
 
 const makeDomo = async (req, res) => {
@@ -37,7 +36,10 @@ const makeDomo = async (req, res) => {
         const newDomo = new Domo(domoData);
         await newDomo.save();
 
-        return res.json({ redirect: '/maker' });
+        return res.status(201).json({
+            name: newDomo.name,
+            age: newDomo.age,
+        });
     } catch (err) {
         console.log(err);
 
@@ -57,4 +59,5 @@ const makeDomo = async (req, res) => {
 module.exports = {
     makerPage,
     makeDomo,
+    getDomos,
 };
