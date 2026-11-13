@@ -21,7 +21,7 @@ const dbURI = process.env.MONGODB_URI || 'mongodb://127.0.0.1/DomoMaker';
 mongoose.connect(dbURI).catch((err) => {
     console.log('Could not connect to database');
     throw err;
-});
+});  
 
 const redisClient = redis.createClient({
     url: process.env.REDISCLOUD_URL,
