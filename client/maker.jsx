@@ -4,19 +4,21 @@ const React = require('react');
 const { useState, useEffect } = React;
 const { createRoot } = require('react-dom/client');
 
+//added color
 const handleDomo = (e, onDomoAdded) => {
     e.preventDefault();
     helper.hideError();
 
     const name = e.target.querySelector('#domoName').value;
     const age = e.target.querySelector('#domoAge').value;
+    const color = e.target.querySelector('#domoColor').value;
 
-    if (!name || !age) {
+    if (!name || !age || !color) {
         helper.handleError('All fields are required!');
         return false;
     }
 
-    helper.sendPost(e.target.action, { name, age }, onDomoAdded);
+    helper.sendPost(e.target.action, { name, age, color }, onDomoAdded);
     return false;
 };
 
@@ -37,11 +39,17 @@ const DomoForm = (props) => {
             <label htmlFor="age">Age: </label>
             <input id="domoAge" type="number" name="age" placeholder="Domo Age" />
 
+            <label htmlFor="color">Color: </label>
+            <select id="domoColor" name="color">
+                <option value="Red">Red</option>
+                <option value="Blue">Blue</option>
+                <option value="Yellow">Yellow</option>
+            </select>
+
             <input className="makeDomoSubmit" type="submit" value="Make Domo" />
         </form>
     );
 };
-
 
 const DomoList = (props) => {
     const [domos, setDomos] = useState(props.domos);
@@ -64,13 +72,16 @@ const DomoList = (props) => {
         );
     }
 
+    //added color
     const domoNodes = domos.map((domo) => (
         <div key={domo._id} className="domo">
             <img src="/assets/img/domoface.jpeg" alt="domo face" className="domoFace" />
             <h3 className="domoName">Name: {domo.name}</h3>
             <h3 className="domoAge">Age: {domo.age}</h3>
+            <h3 className="domoColor">Color: {domo.color || 'None'}</h3>
         </div>
     ));
+
 
     return (
         <div className="domoList">

@@ -26,6 +26,12 @@ const DomoSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+    // new field for part E
+    color: {
+        type: String,
+        required: true,
+        enum: ['Red', 'Blue', 'Yellow'],
+    },
 });
 
 DomoSchema.statics.toAPI = (doc) => ({
